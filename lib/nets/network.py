@@ -210,6 +210,7 @@ class Network(object):
   def _anchor_component(self):
     with tf.variable_scope('ANCHOR_' + self._tag) as scope:
       # just to get the shape right
+      #利用原图尺寸以及stride数值来推算经过特征提取后输出的特征图尺寸
       height = tf.to_int32(tf.ceil(self._im_info[0] / np.float32(self._feat_stride[0])))
       width = tf.to_int32(tf.ceil(self._im_info[1] / np.float32(self._feat_stride[0])))
       if cfg.USE_E2E_TF:
