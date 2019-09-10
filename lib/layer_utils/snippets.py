@@ -11,6 +11,9 @@ import tensorflow as tf
 import numpy as np
 from layer_utils.generate_anchors import generate_anchors
 
+#分开看一下这个函数，首先是generate_anchors（）函数，功能就是生成9个不同面积不同长宽比的窗口，
+#接下来根据height和width，将9个尺寸的窗口应用于（height X width）个中心点上，生成height X width X 9 个具体的窗口，
+#也就是height X width X （9X4）个具体的坐标，即上文中假设的60X60X（9X4）个坐标
 def generate_anchors_pre(height, width, feat_stride, anchor_scales=(8,16,32), anchor_ratios=(0.5,1,2)):
   """ A wrapper function to generate anchors given different scales
     Also return the number of anchors in variable 'length'
