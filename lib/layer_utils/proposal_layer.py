@@ -16,7 +16,13 @@ from model.nms_wrapper import nms
 def proposal_layer(rpn_cls_prob, rpn_bbox_pred, im_info, cfg_key, _feat_stride, anchors, num_anchors):
   """A simplified version compared to fast/er RCNN
      For details please see the technical report
+      1. 根据得分高低，取前pre_nms_topN个窗口
+      2. 非极大值抑制
+      3. 再选取前post_nms_topN个窗口
+      4. 将每个窗口的信息由4维（坐标）扩至5维
+    输出筛选后的窗口以及其得分
   """
+  
   if type(cfg_key) == bytes:
       cfg_key = cfg_key.decode('utf-8')
   pre_nms_topN = cfg[cfg_key].RPN_PRE_NMS_TOP_N
