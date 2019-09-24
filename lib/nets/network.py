@@ -320,7 +320,8 @@ class Network(object):
       self._event_summaries.update(self._losses)
 
     return loss
-
+  
+  
   def _region_proposal(self, net_conv, is_training, initializer):
     rpn = slim.conv2d(net_conv, cfg.RPN_CHANNELS, [3, 3], trainable=is_training, weights_initializer=initializer,
                         scope="rpn_conv/3x3")
@@ -336,6 +337,9 @@ class Network(object):
     rpn_bbox_pred = slim.conv2d(rpn, self._num_anchors * 4, [1, 1], trainable=is_training,
                                 weights_initializer=initializer,
                                 padding='VALID', activation_fn=None, scope='rpn_bbox_pred')
+  #首先是一个3X3卷积，之后通过各种reshape，softmax得到rpn_cls_prob这个张量，尺寸为[-1，W, H, 9*2]，
+  #即之前假设的对于每一张图的60X60X（9X2）个得分，以及rpn_bbox_pred，[-1， W， H， 9*4]，为候选框roi的修正量，
+  #结合之前得到的self._anchors即可得候选框坐标。
     if is_training:
       rois, roi_scores = self._proposal_layer(rpn_cls_prob, rpn_bbox_pred, "rois")
       rpn_labels = self._anchor_target_layer(rpn_cls_score, "anchor")
