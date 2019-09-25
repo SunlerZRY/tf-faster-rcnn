@@ -87,6 +87,8 @@ def anchor_target_layer(rpn_cls_score, gt_boxes, im_info, _feat_stride, all_anch
 
   bbox_targets = np.zeros((len(inds_inside), 4), dtype=np.float32)
   bbox_targets = _compute_targets(anchors, gt_boxes[argmax_overlaps, :])
+   #bbox_targets，以及后续的outside，inside权重，用于构建训练窗口回归的loss函数
+   #_compute_targets函数正常是调用model.bbox_transform.py中的bbox_transform函数：
 
   bbox_inside_weights = np.zeros((len(inds_inside), 4), dtype=np.float32)
   # only the positive ones have regression targets
